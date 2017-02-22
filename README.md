@@ -16,6 +16,8 @@ Play this song near a blue Time Block.
 
 ## Usage
 
+I'm still sort of fleshing out some things. So, I'll update thing as they change.
+
 ```ruby
 require 'ocarina_of_time'
 
@@ -28,17 +30,12 @@ timeline.beginning
 # check for beginning of time
 timeline.beginning?
 
-# end of time
 timeline.ending
 # => false
-
-# check for end of time
 timeline.ending?
 # => false
-
-# set beginning of end of time
+# set end of time
 timeline.ending = Time.now
-
 timeline.ending?
 # => true
 
