@@ -3,9 +3,7 @@ module OcarinaOfTime
   # Respresent the logic of a Timeline. 
   # @author Kent 'picat' Gruber 
   class Timeline
-
-    attr_accessor :beginning
-    attr_accessor :ending
+    # Access events.
     attr_accessor :events
 
     # Create a new **Timeline** object.
@@ -15,10 +13,40 @@ module OcarinaOfTime
     # @option args [Time] :end ending point in time (default: false)
     # @return [void]
     def initialize(args={})
-      @beginning = args[:begin] || Time.now
-      @ending    = args[:end]   || false
-      @flex      = false # have a rigid timeline
+      if args[:flex]
+        @flex      = true
+      else
+        @flex      = false # have a rigid timeline
+        @beginning = args[:begin] || Time.now
+        @ending    = args[:end]   || false
+      end
       @events    = Events.new
+    end
+
+    # Either get the beinning of the timline or set it.
+    def beginning(set=false)
+      if set
+        @beginning = set unless @flex
+      else
+        if @flex
+          @events.by(newest: true).first
+        else
+          @beginning
+        end
+      end
+    end
+
+    # Either get the ending of the timline or set it.
+    def ending(set=false)
+      if set
+        @ending = set unless @flex
+      else
+        if @flex
+          @events.by(oldest: true).first
+        else
+          @ending
+        end
+      end
     end
 
     # Turn on a flexible timeline, where events will change the potential
@@ -29,6 +57,13 @@ module OcarinaOfTime
     # makes it very easy to grow ( by moving forward in time ) if there is no ending set.
     def flex(on = true)
       on ? @flex = true : @flex = false
+    end
+
+    # Yolo swag, lets just turn the flex on.
+    #
+    # @return[void] 
+    def flex!
+      @flex = true
     end
 
     # Check if the Timeline is flexible or not.
@@ -43,7 +78,15 @@ module OcarinaOfTime
     # 
     # @return[Boolean] 
     def ending?
-      @ending ? true : false
+      if @flex
+        if @events.data.all.empty?
+          false
+        else
+          true
+        end 
+      else
+        @ending ? true : false
+      end
     end
 
     # Check if there's currently a beginning of time
@@ -51,7 +94,15 @@ module OcarinaOfTime
     # 
     # @return[Boolean] 
     def beginning?
-      @beginning ? true : false
+      if @flex 
+        if @events.data.all.empty?
+          false
+        else
+          true
+        end
+      else
+        @beginning ? true : false
+      end
     end
 
     # Get the difference in time between +two+ points in +time+.

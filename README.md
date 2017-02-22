@@ -26,7 +26,6 @@ timeline = OcarinaOfTime::Timeline.new
 # beginning of time
 timeline.beginning
 # => 2017-02-21 10:10:16 -0500
-
 # check for beginning of time
 timeline.beginning?
 
@@ -35,16 +34,23 @@ timeline.ending
 timeline.ending?
 # => false
 # set end of time
-timeline.ending = Time.now
+timeline.ending(Time.now)
 timeline.ending?
 # => true
-
 timeline.ending
 # => 2017-02-21 10:15:45 -0500
+
+# or, just make it flexible
+timeline.flex!
+
 ```
 
 ## Timeline
-A timeline is a way of displaying a list of events in chronological order, sometimes described as a project artifact. Timelines can use any time scale, depending on the subject and data. Most timelines use a linear scale, where a unit of distance is equal to a set amount of time.
+A timeline is a way of displaying a list of events in chronological order, sometimes described as a project artifact ( an event ). Timelines can use any time scale, depending on the subject and data. Most timelines use a linear scale, where a unit of distance is equal to a set amount of time. Or, well, at least that is what Wikipedia says.
+
+### The Short and Simple
+
+A timeline has a beginning ( sometimes ) and an ending ( sometimes ). You can have a flexible timeline where, as events are added, the beginning and ending points in time will be determined by the actual events themselve.
  
 ```ruby
 # will return a unique id number for the timeline event
